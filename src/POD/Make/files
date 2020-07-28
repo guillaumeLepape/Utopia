@@ -1,0 +1,3 @@
+POD.C
+
+LIB = $(FOAM_USER_LIBBIN)/libUtopiaPOD

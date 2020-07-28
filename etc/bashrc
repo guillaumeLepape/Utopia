@@ -1,0 +1,4 @@
+#!/bin/bash
+export LIB_UTOPIA_ETC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+export LIB_UTOPIA="$(dirname "${LIB_UTOPIA_ETC}")"
+export LIB_UTOPIA_SRC="$LIB_UTOPIA/src"

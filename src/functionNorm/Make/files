@@ -1,0 +1,4 @@
+H1Seminorm.C
+L2Norm.C
+
+LIB = $(FOAM_USER_LIBBIN)/libFunctionNorm
