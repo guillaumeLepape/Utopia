@@ -14,7 +14,7 @@ while getopts 'htmqj:au' flag; do
     # t) tutorial_flag='true' ;;
     # m) torch_flag="true" ;;
     # q) muq_flag="true" ;;
-    # a) applications_flag="true" ;;
+    a) applications_flag="true" ;;
     u) unit_tests_flag="true" ;;
     j) parallel_flag="-j ${OPTARG}" ;;
     *) print_usage
@@ -74,23 +74,23 @@ for d in ./*/ ; do
 done
 cd ..
 
-# cd applications
-# if [[ $applications_flag == 'true' ]]; then
-# for d in ./*/ ; do
-#     echo $d
-#     cd $d
-#     if [ -f "Make/files" ]; then
-#     wmake $parallel_flag
-#     if [ $? -ne 0 ]
-#     then
-#      echo $d "did not compile"
-#      exit 1
-#     fi
-# 	fi
-#     cd ../
-# done
-# fi
-# cd ..
+cd applications
+if [[ $applications_flag == 'true' ]]; then
+for d in ./*/ ; do
+    echo $d
+    cd $d
+    if [ -f "Make/files" ]; then
+    wmake $parallel_flag
+    if [ $? -ne 0 ]
+    then
+     echo $d "did not compile"
+     exit 1
+    fi
+	fi
+    cd ../
+done
+fi
+cd ..
 
 
 # cd tutorials
