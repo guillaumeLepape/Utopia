@@ -40,10 +40,10 @@ namespace functionNorm
 {
 
   template<class T>
-  dimensionedScalar L2Norm(const GeometricField<T, fvPatchField, volMesh>& field);
+  dimensionedScalar L2Norm(const T& field);
 
   template<class T>
-  dimensionedScalar L2Norm(const tmp<GeometricField<T, fvPatchField, volMesh>>& field);
+  dimensionedScalar L2Norm(const tmp<T>& field);
 
 
 }

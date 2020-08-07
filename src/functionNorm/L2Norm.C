@@ -38,19 +38,19 @@ namespace functionNorm
 {
 
 template<>
-dimensionedScalar L2Norm(const GeometricField<scalar,fvPatchField, volMesh>& field)
+dimensionedScalar L2Norm(const volScalarField& field)
 {
     return ( Foam::sqrt(fvc::domainIntegrate(field * field).value()) );
 }
 
 template<>
-dimensionedScalar L2Norm(const GeometricField<vector, fvPatchField, volMesh>& field)
+dimensionedScalar L2Norm(const volVectorField& field)
 {
     return ( Foam::sqrt(fvc::domainIntegrate(field & field).value()) );
 }
 
 template<class T>
-dimensionedScalar L2Norm(const tmp<GeometricField<T, fvPatchField, volMesh>>& field)
+dimensionedScalar L2Norm(const tmp<T>& field)
 {
   dimensionedScalar norm(functionNorm::L2Norm<T>(field));
   field.clear();
