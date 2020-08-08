@@ -9,7 +9,7 @@ namespace Utopia {
     UtopiaDict_(UtopiaDict),
     nModes_(UtopiaDict.lookupOrDefault<label>("nModes",1)),
     nSnapshots_(UtopiaDict.lookupOrDefault<label>("nSnapshots",1)),
-    covMatrix_(),
+    covMatrix_(nSnapshots_,nSnapshots_),
     topos_(nModes_),
     chronos_(nModes_)
   {
@@ -17,9 +17,44 @@ namespace Utopia {
   }
 
   template<class T>
-  void POD<T>::compute()
+  void POD<T>::computeMean()
   {
 
+  }
+
+  template<class T>
+  void POD<T>::computeCovMatrix()
+  {
+
+  }
+
+  template<class T>
+  void POD<T>::diagonalize()
+  {
+
+  }
+
+  template<class T>
+  void POD<T>::computeTopos()
+  {
+
+  }
+
+  template<class T>
+  void POD<T>::computeChronos()
+  {
+
+  }
+
+
+  template<class T>
+  void POD<T>::compute()
+  {
+    computeMean();
+    computeCovMatrix();
+    diagonalize();
+    computeTopos();
+    computeChronos();
   }
 
 }
