@@ -1,5 +1,10 @@
 #include "fvCFD.H"
-#include "Topos_Chronos.H"
+// #include "Topos_Chronos.H"
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#include <Eigen/Eigen>
+#pragma GCC diagnostic pop
 
 namespace Utopia {
 
@@ -11,6 +16,9 @@ namespace Utopia {
       const fvMesh& mesh_;
       const IOdictionary& UtopiaDict_;
       const label nModes_;
+      const label nSnapshots_;
+
+      Eigen::MatrixXd covMatrix_;
 
       List<T> topos_;
       List<dimensionedVector> chronos_;

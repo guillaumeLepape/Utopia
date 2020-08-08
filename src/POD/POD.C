@@ -8,6 +8,8 @@ namespace Utopia {
     mesh_(mesh),
     UtopiaDict_(UtopiaDict),
     nModes_(UtopiaDict.lookupOrDefault<label>("nModes",1)),
+    nSnapshots_(UtopiaDict.lookupOrDefault<label>("nSnapshots",1)),
+    covMatrix_(),
     topos_(nModes_),
     chronos_(nModes_)
   {
@@ -17,7 +19,7 @@ namespace Utopia {
   template<class T>
   void POD<T>::compute()
   {
-    
+
   }
 
 }
