@@ -1,5 +1,7 @@
+#ifndef POD_H
+#define POD_H
+
 #include "fvCFD.H"
-// #include "Topos_Chronos.H"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wold-style-cast"
@@ -15,14 +17,21 @@ namespace Utopia {
       const Time& runTime_;
       const fvMesh& mesh_;
       const IOdictionary& UtopiaDict_;
+      const scalar startTime_;
+      const scalar latestTime_;
+      const label startTimeIndex_;
+      const label latestTimeIndex_;
       const label nModes_;
       const label nSnapshots_;
+      const label nBlocks_;
+      instantList timeDirs;
 
       Eigen::MatrixXd covMatrix_;
 
-      List<T> topos_;
+      autoPtr<T> mean_;
+      PtrList<T> topos_;
       List<dimensionedVector> chronos_;
-      T mean_;
+
     public :
       POD(const Time& runTime, const fvMesh& mesh, const IOdictionary& UtopiaDict);
 
@@ -34,9 +43,11 @@ namespace Utopia {
 
       void compute();
 
-      const List<T>& topos() const { return topos_;}
-      const List<dimensionedVector>& chronos() const { return chronos_; }
-      const T& mean() const { return mean_; }
+      inline const PtrList<T>& topos() const { return topos_; }
+      inline const List<dimensionedVector>& chronos() const { return chronos_; }
+      inline const T& mean() const { return mean_; }
   };
 
 }
+
+#endif

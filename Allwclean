@@ -12,14 +12,14 @@ for d in ./*/ ; do
 done
 cd ..
 
-# for d in applications/* ; do
-#     echo $d
-#     cd $d
-#     if [ -f "Make/files" ]; then
-#     wclean
-#     fi
-#     cd ../../
-# done
+for d in applications/* ; do
+    echo $d
+    cd $d
+    if [ -f "Make/files" ]; then
+    wclean
+    fi
+    cd ../../
+done
 
 # cd tutorials
 #

@@ -7,12 +7,23 @@ namespace Utopia {
     runTime_(runTime),
     mesh_(mesh),
     UtopiaDict_(UtopiaDict),
+    startTime_(UtopiaDict.lookupOrDefault<label>("startTime",1)),
+    latestTime_(UtopiaDict.lookupOrDefault<label>("endTime",1)),
+    startTimeIndex_(Time::findClosestTimeIndex(runTime.times(),startTime_)),
+    latestTimeIndex_(Time::findClosestTimeIndex(runTime.times(),latestTime_)),
     nModes_(UtopiaDict.lookupOrDefault<label>("nModes",1)),
-    nSnapshots_(UtopiaDict.lookupOrDefault<label>("nSnapshots",1)),
+    nSnapshots_(latestTimeIndex_ - startTimeIndex_),
+    nBlocks_(UtopiaDict.lookupOrDefault<label>("nModes",1)),
     covMatrix_(nSnapshots_,nSnapshots_),
+    mean_(),
     topos_(nModes_),
     chronos_(nModes_)
   {
+    for (label i = startTimeIndex_; i < latestTime_ + 1; i++)
+    {
+      timeDirs.append( instant(runTime.times()[i].value(), runTime.times()[i].name()) );
+    }
+
     compute();
   }
 
@@ -56,5 +67,8 @@ namespace Utopia {
     computeTopos();
     computeChronos();
   }
+
+  // template class POD<volVectorField>;
+  // template class POD<volScalarField>;
 
 }
