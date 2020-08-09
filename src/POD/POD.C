@@ -15,13 +15,23 @@ namespace Utopia {
     nSnapshots_(latestTimeIndex_ - startTimeIndex_),
     nBlocks_(UtopiaDict.lookupOrDefault<label>("nModes",1)),
     covMatrix_(nSnapshots_,nSnapshots_),
-    mean_(),
+    mean_(
+      IOobject
+      (
+        "meanU",
+        "mean",
+        mesh_,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+      ),
+      mesh_
+    ),
     topos_(nModes_),
     chronos_(nModes_)
   {
     for (label i = startTimeIndex_; i < latestTime_ + 1; i++)
     {
-      timeDirs.append( instant(runTime.times()[i].value(), runTime.times()[i].name()) );
+      timeDirs_.append( instant(runTime.times()[i].value(), runTime.times()[i].name()) );
     }
 
     compute();
@@ -30,7 +40,23 @@ namespace Utopia {
   template<class T>
   void POD<T>::computeMean()
   {
+    forAll(timeDirs_,i)
+    {
+      volVectorField U
+      (
+        IOobject
+        (
+          "U",
+          timeDirs_[i].name(),
+          mesh_,
+          IOobject::MUST_READ,
+          IOobject::AUTO_WRITE
+        ),
+        mesh_
+      );
 
+      mean_ += U;
+    }
   }
 
   template<class T>
@@ -68,7 +94,5 @@ namespace Utopia {
     computeChronos();
   }
 
-  // template class POD<volVectorField>;
-  // template class POD<volScalarField>;
 
 }

@@ -24,7 +24,7 @@ namespace Utopia {
       const label nModes_;
       const label nSnapshots_;
       const label nBlocks_;
-      instantList timeDirs;
+      instantList timeDirs_;
 
       Eigen::MatrixXd covMatrix_;
 
