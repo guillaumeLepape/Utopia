@@ -41,11 +41,11 @@ int main(int argc, char *argv[])
   //
   //   Info << runTime.timeName() << endl;
 
-  IOdictionary UtopiaDict
+  IOdictionary POD_U
     (
         IOobject
         (
-            "UtopiaDict",
+            "POD_U",
             runTime.system(),
             mesh,
             IOobject::MUST_READ,
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
         )
     );
 
-  Utopia::POD<volVectorField> pod(runTime, mesh, UtopiaDict);
+  Utopia::POD<volVectorField> pod(runTime, mesh, POD_U);
 
   // forAll(timeDirs, timei)
   // {

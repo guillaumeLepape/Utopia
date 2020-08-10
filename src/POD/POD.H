@@ -22,15 +22,17 @@ namespace Utopia {
       const label startTimeIndex_;
       const label latestTimeIndex_;
       const label nModes_;
+      const word nameField_;
       const label nSnapshots_;
       const label nBlocks_;
+      const word resultFolder_;
       instantList timeDirs_;
 
       Eigen::MatrixXd covMatrix_;
 
-      autoPtr<T> mean_;
+      T mean_;
       PtrList<T> topos_;
-      List<dimensionedVector> chronos_;
+      List<dimensionedScalar> chronos_;
 
     public :
       POD(const Time& runTime, const fvMesh& mesh, const IOdictionary& UtopiaDict);
