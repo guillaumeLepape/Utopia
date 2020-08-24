@@ -1,5 +1,5 @@
-#ifndef POD_H
-#define POD_H
+#ifndef UTOPIA_POD_H
+#define UTOPIA_POD_H
 
 #include "fvCFD.H"
 
@@ -29,7 +29,6 @@ namespace Utopia {
       instantList timeDirs_;
 
       Eigen::MatrixXd covMatrix_;
-
       T mean_;
       PtrList<T> topos_;
       List<dimensionedScalar> chronos_;
@@ -45,6 +44,9 @@ namespace Utopia {
 
       void compute();
 
+      void write();
+
+      inline const Eigen::MatrixXd& covMatrix() const { return covMatrix_; }
       inline const PtrList<T>& topos() const { return topos_; }
       inline const List<dimensionedVector>& chronos() const { return chronos_; }
       inline const T& mean() const { return mean_; }

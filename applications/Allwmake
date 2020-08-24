@@ -1,9 +1,10 @@
 #!/bin/sh
 cd "${0%/*}" || exit                            # Run from this directory
+. "${WM_PROJECT_DIR:?}"/wmake/scripts/AllwmakeParseArguments
+
 #------------------------------------------------------------------------------
 
-wclean all src
-wclean all applications
-wclean all unitTests
+wmake -all $targetType solvers
+wmake -all $targetType utilities
 
 #------------------------------------------------------------------------------

@@ -23,7 +23,7 @@ dimensionedScalar H1Seminorm(const GeometricField<vector, fvPatchField, volMesh>
 template<class T>
 dimensionedScalar H1Seminorm(const tmp<GeometricField<T, fvPatchField, volMesh>>& field)
 {
-    dimensionedScalar norm(functionNorm::H1Seminorm<T>(field));
+    dimensionedScalar norm(functionNorm::H1Seminorm<T>(field()));
     field.clear();
     return norm;
 }

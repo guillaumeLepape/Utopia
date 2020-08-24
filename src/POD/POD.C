@@ -1,4 +1,6 @@
 #include "POD.H"
+#include "exportSpatialModes.H"
+#include "exportField.H"
 
 namespace Utopia {
 
@@ -16,6 +18,7 @@ namespace Utopia {
     nSnapshots_(latestTimeIndex_ - startTimeIndex_),
     nBlocks_(UtopiaDict.lookupOrDefault<label>("nModes",1)),
     resultFolder_(UtopiaDict.lookupOrDefault<word>("resultFolder","UtopiaDict")),
+    timeDirs_( SubList<instant>( runTime_.times(), latestTimeIndex_ - startTimeIndex_ + 1, startTimeIndex_)  ),
     covMatrix_(nSnapshots_,nSnapshots_),
     mean_(
       IOobject
@@ -32,18 +35,15 @@ namespace Utopia {
     topos_(),
     chronos_(nModes_)
   {
-    timeDirs_.resize(latestTimeIndex_ - startTimeIndex_ + 1);
-
-    for (label i = 0; i < latestTimeIndex_ + 1 - startTimeIndex_; i++)
-    {
-      timeDirs_[i] = instant(runTime.times()[i + startTimeIndex_].value(), runTime.times()[i + startTime_].name());
-    }
+    Info << timeDirs_ << endl;
 
     for (label i = 0; i < nModes_; i++)
     {
-      fileName name = (fileName) (resultFolder_ + "/" + name(i));
+      fileName name = resultFolder_ + "/" + name(i);
+      Info << name << endl;
 
-      topos_.append(volVectorField(
+      volVectorField topos_i
+      (
         IOobject
         (
           nameField_,
@@ -53,8 +53,10 @@ namespace Utopia {
           IOobject::NO_WRITE
         ),
         mesh_,
-        dimensionedVector(dimless, Zero)
-      ));
+        dimensionSet(0,0,0,0,0)
+      );
+
+      topos_.append(topos_i);
     }
 
     compute();
@@ -66,12 +68,16 @@ namespace Utopia {
   template<class T>
   void POD<T>::computeMean()
   {
+    Info << "Computing mean" << endl;
+
     dimensionedScalar one(dimensionSet(0,0,1,0,0),1);
 
     mean_ = 0*mean_;
 
     forAll(timeDirs_,i)
     {
+      Info << timeDirs_[i].name() << endl;
+
       volVectorField U
       (
         IOobject
@@ -90,12 +96,21 @@ namespace Utopia {
 
     mean_ = mean_/nSnapshots_;
 
-    // mean_.write();
+    word o = resultFolder_ + "/mean/" + nameField_;
 
-    fileName fieldname = resultFolder_ + "/mean/" + nameField_;
-    OFstream os(fieldname);
-    mean_.writeHeader(os);
-    os << mean_ << endl;
+    Info << o << endl;
+
+    Stream::exportField<T>(mean_,resultFolder_ + "/mean/" + nameField_);
+
+
+    // mean_.write();
+    //
+    // fileName fieldname = resultFolder_ + "/mean/" + nameField_;
+    // OFstream os(fieldname);
+    // mean_.writeHeader(os);
+    // os << mean_ << endl;
+
+    Info << endl;
   }
 
 
@@ -144,5 +159,11 @@ namespace Utopia {
     computeChronos();
   }
 
+
+  template<class T>
+  void POD<T>::write()
+  {
+
+  }
 
 }

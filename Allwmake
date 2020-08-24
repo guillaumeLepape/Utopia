@@ -1,134 +1,51 @@
-#!/bin/bash
-cd ${0%/*} || exit 1    # Run from this directory
+#!/bin/sh
+cd "${0%/*}" || exit                            # Run from this directory
+targetType=libso
+. "${WM_PROJECT_DIR:?}"/wmake/scripts/AllwmakeParseArguments
 
-help_flag=''
-# tutorial_flag=''
-# torch_flag=''
-# muq_flag=''
-# applications_flag=''
-unit_tests_flag=''
+#------------------------------------------------------------------------------
+# Build into FOAM_USER_{APPBIN,LIBBIN} unless otherwise specified with
+# -prefix or FOAM_MODULE_{APPBIN,LIBBIN} env varables
 
-while getopts 'htmqj:au' flag; do
-  case "${flag}" in
-    h) help_flag='true' ;;
-    # t) tutorial_flag='true' ;;
-    # m) torch_flag="true" ;;
-    # q) muq_flag="true" ;;
-    a) applications_flag="true" ;;
-    u) unit_tests_flag="true" ;;
-    j) parallel_flag="-j ${OPTARG}" ;;
-    *) print_usage
-       exit 1 ;;
-  esac
-done
+moduleName="Utopia"
 
-if [[ $help_flag == 'true' ]]; then
-    echo "Help of the ITHACA-FV ./Allwmake utility"
+echo "========================================"
+date "+%Y-%m-%d %H:%M:%S %z" 2>/dev/null || echo "date is unknown"
+echo "Starting compile of $moduleName with ${WM_PROJECT_DIR##*/}"
+echo "  $WM_COMPILER $WM_COMPILER_TYPE compiler"
+echo "  ${WM_OPTIONS}, with ${WM_MPLIB} ${FOAM_MPI}"
+echo "  prefix = ${FOAM_MODULE_PREFIX:-default (user)}"
+echo
+
+
+echo "========================================"
+echo "Compile $moduleName libraries"
+echo
+src/Allwmake $targetType $*
+
+echo "========================================"
+echo "Compile $moduleName applications"
+echo
+applications/Allwmake $targetType $*
+
+# Build tests?
+unset buildTests
+# buildTests=true
+
+if [ "$buildTests" = true ] && [ -x "test/Allwmake" ]
+then
+    echo "========================================"
+    echo "Compile $moduleName tests"
     echo
-    echo "options:"
-    echo "-h,     show brief help"
-    # echo "-t,     enable disable tutorials compilation, False by default"
-    # echo "-m,     enable TORCH extension, False by default"
-    # echo "-q,     enable MUQ2 extension, False by default"
-    echo "-j,     enable parallel compilation with specified number of cores"
-    # echo "-a,     enable application compilation, False by default"
-    echo "-u,     enable unitTests compilation, False by default"
-    echo
-    echo "Help for the standard wmake OpenFOAM utility"
-    wmake -h
-    exit
+    "test/Allwmake" $targetType $*
 fi
 
-
-cd src
-for d in ./*/ ; do
-    cd $d
-    if [ -f "Make/files" ]; then
-        # if [[ $d == './ITHACA_TORCH/' ]]; then
-        #     if [[ $torch_flag == 'true' ]]; then
-        #         echo $d
-        #         wmake $parallel_flag
-        #     else
-        #         cd ..
-        #         continue 2
-        #     fi
-        # elif [[ $d == './ITHACA_MUQ/' ]]; then
-        #     if [[ $muq_flag == 'true' ]]; then
-        #         echo $d
-        #         wmake $parallel_flag
-        #     else
-        #         cd ..
-        #         continue 2
-        #     fi
-        # else
-            echo $d
-            wmake $parallel_flag
-        # fi
-     if [ $? -ne 0 ]
-     then
-      echo $d "did not compile"
-      exit 1
-     fi
-    fi
-    cd ../
-done
-cd ..
-
-cd applications
-if [[ $applications_flag == 'true' ]]; then
-for d in ./*/ ; do
-    echo $d
-    cd $d
-    if [ -f "Make/files" ]; then
-    wmake $parallel_flag
-    if [ $? -ne 0 ]
-    then
-     echo $d "did not compile"
-     exit 1
-    fi
-	fi
-    cd ../
-done
-fi
-cd ..
-
-
-# cd tutorials
-# if [[ $tutorial_flag == 'true' ]]; then
-# for d in ./*/ ; do
-#     echo $d
-#     cd $d
-#     if [ -f "Make/files" ]; then
-#     wmake $parallel_flag
-#      if [ $? -ne 0 ]
-#      then
-#       echo $d "did not compile"
-#       exit 1
-#      fi
-#     fi
-#     cd ../
-# done
-# fi
-# cd ..
-
-cd unitTests
-if [[ $unit_tests_flag == 'true' ]]; then
-for d in ./*/ ; do
-    echo $d
-    cd $d
-    if [ -f "Make/files" ]; then
-    wmake $parallel_flag
-    if [ $? -ne 0 ]
-    then
-     echo $d "did not compile"
-     exit 1
-    fi
-    fi
-    cd ../
-done
-fi
-cd ..
-
-
-
+# Some summary information
+echo
+date "+%Y-%m-%d %H:%M:%S %z" 2>/dev/null || echo "date is unknown"
+echo "========================================"
+echo "  Finished compile of $moduleName with ${WM_PROJECT_DIR##*/}"
+echo "  $WM_COMPILER $WM_COMPILER_TYPE compiler"
+echo "  ${WM_OPTIONS}, with ${WM_MPLIB} ${FOAM_MPI}"
+echo
 #------------------------------------------------------------------------------

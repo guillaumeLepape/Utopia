@@ -1,5 +1,5 @@
-#ifndef H1Norm_H
-#define H1Norm_H
+#ifndef UTOPIA_H1NORM_H
+#define UTOPIA_H1NORM_H
 
 #include "volFieldsFwd.H"
 #include "fvCFD.H"

@@ -2,8 +2,8 @@
 cd "${0%/*}" || exit                            # Run from this directory
 #------------------------------------------------------------------------------
 
-wclean all src
-wclean all applications
-wclean all unitTests
+wclean libso functionNorm
+wclean libso POD
+wclean libso Stream
 
 #------------------------------------------------------------------------------

@@ -52,7 +52,7 @@ dimensionedScalar L2Norm(const volVectorField& field)
 template<class T>
 dimensionedScalar L2Norm(const tmp<T>& field)
 {
-  dimensionedScalar norm(functionNorm::L2Norm<T>(field));
+  dimensionedScalar norm(functionNorm::L2Norm<T>(field()));
   field.clear();
   return norm;
 }

@@ -1,0 +1,4 @@
+exportSpatialModes.H
+exportField.H
+
+LIB = $(FOAM_USER_LIBBIN)/libUtopiaStream
