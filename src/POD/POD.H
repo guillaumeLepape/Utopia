@@ -48,7 +48,7 @@ namespace Utopia {
 
       inline const Eigen::MatrixXd& covMatrix() const { return covMatrix_; }
       inline const PtrList<T>& topos() const { return topos_; }
-      inline const List<dimensionedVector>& chronos() const { return chronos_; }
+      inline const List<dimensionedScalar>& chronos() const { return chronos_; }
       inline const T& mean() const { return mean_; }
   };
 
